@@ -6,6 +6,9 @@
       SourceConfigWindow = xjs.SourceConfigWindow;
 
   var currentSource;
+  var firstLoad = true;
+
+  var closeBtn = document.getElementById('done');
 
   var elements = {
     func     : document.getElementById('function'),
@@ -46,6 +49,10 @@
     if (config.mouse === true) {
       elements.mouse.checked = true;
     }
+
+    if (config.keyboard === true) {
+      elements.keyboard.checked = true;
+    }
   };
 
   var updateConfig = function(item) {
@@ -57,21 +64,27 @@
       arrow   : elements.arrow.checked,
       numpad  : elements.numpad.checked,
       mouse   : elements.mouse.checked,
+      keyboard   : elements.keyboard.checked,
     };
-
     item.requestSaveConfig(config);
   };
 
   xjs.ready().then(function() {
+    var configWindow =  xjs.SourceConfigWindow.getInstance();
     SourceConfigWindow.getInstance().useTabbedWindow({
       customTabs: ['Keyboard/Mouse'],
       tabOrder: ['Keyboard/Mouse', 'Color', 'Layout', 'Transition']
+    });
+
+    closeBtn.addEventListener('click',function(){
+      configWindow.closeConfig();
     });
     return Item.getCurrentSource();
   }).then(function(myItem) {
     currentSource = myItem;
     return currentSource.loadConfig();
   }).then(function(config) {
+    
     // load last saved configuration
     // initialize to Show if no configuration set yet
     config = {
@@ -82,6 +95,7 @@
       arrow   : config.arrow !== undefined ? config.arrow : true,
       numpad  : config.numpad !== undefined ? config.numpad : true,
       mouse   : config.mouse !== undefined ? config.mouse : true,
+      keyboard   : config.keyboard !== undefined ? config.keyboard : true,
     };
 
     updateElements(config);
