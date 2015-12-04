@@ -93,10 +93,10 @@ button:disabled
 button[name=imgSend],
 button[name=done]
 {
-  float: right;
+  float: left;
   height: 22px;
   width: auto;
   padding: 0 16px 0 16px;
   line-height: 20px;
-  margin: 2px;
+  margin: 2px 2px 2px 9px;
 }
