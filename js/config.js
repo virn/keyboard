@@ -76,9 +76,6 @@
       tabOrder: ['Keyboard/Mouse', 'Color', 'Layout', 'Transition']
     });
 
-    closeBtn.addEventListener('click',function(){
-      configWindow.closeConfig();
-    });
     return Item.getCurrentSource();
   }).then(function(myItem) {
     currentSource = myItem;
