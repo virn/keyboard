@@ -22,6 +22,8 @@
   var Item = xjs.Item;
   var Rectangle = xjs.Rectangle;
   var thisItem ='';
+  var tempX;
+  var tempY;
   /* Key code mappings (wParam)
    * In the event that two keys share the same wparam, we use an array where
    * arr[1] refers to the key sending lParam with bit 24 = 1 (extended key)
@@ -352,20 +354,25 @@
       var $element = ui.element;
 
       // Get mouse position 
-      var mouseX = event.pageX;
-      var mouseY = event.pageY;
+      var  mouseX = event.pageX;
+      var  mouseY = event.pageY;      
 
       // Disallow interactions beyond screen bounds
       if (mouseX < 0) {
         mouseX = 0;
-      } else if (mouseX > $(window).width()) {
-        mouseX = $(window).width;
+        mouseY = 0;
       }
+      if (mouseX > $(window).width()) {
+        mouseX = $(window).width();
+       }
       if (mouseY < 0) {
         mouseY = 0;
-      } else if (mouseY > $(window).height()) {
-        mouseY = $(window).height();
+        mouseX = 0;
       }
+      if (mouseY > $(window).height()) {
+        console.log($(window).height())
+        mouseY = $(window).height();
+       }
 
       // get correct new zoom based on axis
       var newZoom = 0;
