@@ -76,7 +76,7 @@
       }
     }
 
-    if ((config.func === false)&&(config.alpha === false)&&(config.system === false)&&(config.nav === false)&&(config.arrow === false)&&(config.numpad === false)){
+    if ((config.func === false)||(config.alpha === false)||(config.system === false)||(config.nav === false)||(config.arrow === false)||(config.numpad === false)){
       elements.keyboard.checked = false;
       temp = true;
     }
@@ -98,9 +98,6 @@
       numpad  : elements.numpad.checked,
       mouse   : elements.mouse.checked,
       keyboard   : elements.keyboard.checked,
-      initPositionX : '',
-      initPositionY : '',
-      initZoom : '',
     };
     updateElements(config);
     item.requestSaveConfig(config);
