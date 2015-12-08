@@ -470,7 +470,6 @@
       arrow   : $('[data-section=arrow]'),
       numpad  : $('[data-section=numpad]'),
       mouse   : $('[data-section=mouse]'),
-      keyboard: $('[data-section=keyboard]'),
     };
 
     var receiveData = function(config){
@@ -490,15 +489,16 @@
     xjs.SourcePluginWindow.getInstance().on('save-config', function(config) {
       item.saveConfig(config);
       // apply configuration
-      for (var i in config) {
+        for (var i in config) {
         if (sections[i] !== undefined) {
           if (config[i] === false) {
             sections[i].addClass('hidden');
           } else {
             sections[i].removeClass('hidden');
+            }
           }
         }
-      }
+        console.log(config.keyboard)   
     });
   });
 })();

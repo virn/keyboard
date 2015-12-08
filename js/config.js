@@ -6,7 +6,7 @@
       SourceConfigWindow = xjs.SourceConfigWindow;
 
   var currentSource;
-  var firstLoad = true;
+  var temp = true;
 
   var closeBtn = document.getElementById('done');
 
@@ -52,7 +52,30 @@
 
     if (config.keyboard === true) {
       elements.keyboard.checked = true;
+      if (temp === true){
+        elements.numpad.checked = true;
+        elements.arrow.checked = true;
+        elements.nav.checked = true;
+        elements.system.checked = true;
+        elements.alpha.checked = true;
+        elements.func.checked = true;
+        temp = false;
+      }
     }
+
+    if (config.keyboard === false) {
+      elements.keyboard.checked = false;
+      if (temp === false){
+        elements.numpad.checked = false;
+        elements.arrow.checked = false;
+        elements.nav.checked = false;
+        elements.system.checked = false;
+        elements.alpha.checked = false;
+        elements.func.checked = false;
+        temp = true;
+      }
+    }
+
   };
 
   var updateConfig = function(item) {
@@ -66,7 +89,13 @@
       mouse   : elements.mouse.checked,
       keyboard   : elements.keyboard.checked,
     };
+    if (config.keyboard === true){
+      updateElements(config);
+    } else {
+      updateElements(config);
+    }
     item.requestSaveConfig(config);
+    
   };
 
   xjs.ready().then(function() {
