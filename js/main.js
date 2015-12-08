@@ -290,7 +290,9 @@
 
   // jQuery UI interactions
   var initPositionX;
+  var initPosXHolder;
   var initPositionY;
+  var initPosYHolder;
   var initPointerX;
   var initPointerY;
   var initZoom;
@@ -373,7 +375,6 @@
         console.log($(window).height())
         mouseY = $(window).height();
        }
-
       // get correct new zoom based on axis
       var newZoom = 0;
       if (axis.indexOf('w') === -1) {
@@ -391,15 +392,11 @@
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.height + 
             initPositionY) - mouseY) / ui.originalSize.height);
       }
-
       // enforce zoom boundaries
       // Check: minimum zoom level
       if (newZoom < 1 ) {
         newZoom = 1;
       }
-
-      console.log(axis);
-
       // Check: resizing must not exceed boundaries
 
       // get ratio after all zoom checks are done.
@@ -481,12 +478,18 @@
             sections[i].removeClass('hidden');
           }
         }
-      }          
+      }
+      initPositionX = config.initPositionX;
+      initPositionY = config.initPositionY;
+      initZoom = config.initZoom;
     };    
     //Apply config on Load
     thisItem.loadConfig().then(receiveData);
     //Apply config on Save
     xjs.SourcePluginWindow.getInstance().on('save-config', function(config) {
+      config.initPositionX = initPositionX;
+      config.initPositionY = initPositionY;
+      config.initZoom = initZoom;
       item.saveConfig(config);
       // apply configuration
         for (var i in config) {
@@ -498,7 +501,6 @@
             }
           }
         }
-        console.log(config.keyboard)   
     });
   });
 })();

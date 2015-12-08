@@ -76,6 +76,16 @@
       }
     }
 
+    if ((config.func === false)&&(config.alpha === false)&&(config.system === false)&&(config.nav === false)&&(config.arrow === false)&&(config.numpad === false)){
+      elements.keyboard.checked = false;
+      temp = true;
+    }
+
+    if ((config.func === true)&&(config.alpha === true)&&(config.system === true)&&(config.nav === true)&&(config.arrow === true)&&(config.numpad === true)){
+      elements.keyboard.checked = true;
+      temp = false;
+    }
+
   };
 
   var updateConfig = function(item) {
@@ -88,12 +98,11 @@
       numpad  : elements.numpad.checked,
       mouse   : elements.mouse.checked,
       keyboard   : elements.keyboard.checked,
+      initPositionX : '',
+      initPositionY : '',
+      initZoom : '',
     };
-    if (config.keyboard === true){
-      updateElements(config);
-    } else {
-      updateElements(config);
-    }
+    updateElements(config);
     item.requestSaveConfig(config);
     
   };
