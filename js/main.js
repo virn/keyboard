@@ -301,6 +301,7 @@
 
   $('[data-section]').draggable({
     start: function(event, ui) {
+      //SET INITIAL POSITION HERE-------------
       initPositionX = ui.position.left;
       initPositionY = ui.position.top;
       initPointerX = event.pageX;
@@ -344,10 +345,8 @@
       initZoom = $(this).css('zoom');
       initPositionX = ui.position.left;
       initPositionY = ui.position.top;
-
       initPointerX = event.pageX;
       initPointerY = event.pageY;
-
       // Gets the axis that the user is dragging. 'se', 'n', etc.
       axis = $(ui.element).data('ui-resizable').axis;
     },
@@ -479,17 +478,11 @@
           }
         }
       }
-      initPositionX = config.initPositionX;
-      initPositionY = config.initPositionY;
-      initZoom = config.initZoom;
     };    
     //Apply config on Load
     thisItem.loadConfig().then(receiveData);
     //Apply config on Save
     xjs.SourcePluginWindow.getInstance().on('save-config', function(config) {
-      config.initPositionX = initPositionX;
-      config.initPositionY = initPositionY;
-      config.initZoom = initZoom;
       item.saveConfig(config);
       // apply configuration
         for (var i in config) {
