@@ -21,9 +21,14 @@
   var xjs = require('xjs');
   var Item = xjs.Item;
   var Rectangle = xjs.Rectangle;
-  var thisItem ='';
-  var tempX;
-  var tempY;
+  var tempConfig = {
+
+  };
+  var tempXpos;
+  var tempYpos;
+  var whichItem = '';
+
+  var allKey = document.getElementById('allItems');
   /* Key code mappings (wParam)
    * In the event that two keys share the same wparam, we use an array where
    * arr[1] refers to the key sending lParam with bit 24 = 1 (extended key)
@@ -306,6 +311,7 @@
       initPositionY = ui.position.top;
       initPointerX = event.pageX;
       initPointerY = event.pageY;
+      
     },
     drag: function(event, ui) {
       var $element = $(this);
@@ -336,6 +342,46 @@
           ui.position.top = (document.body.offsetHeight -
            zoom * $element.height()) / zoom;
       }
+
+        //Get positions based on ID
+        whichItem = ui.helper.context.id;
+
+        if(whichItem === 'mouse'){
+          tempConfig.mouseXpos = ui.position.top;
+          tempConfig.mouseYpos = ui.position.left;
+        }
+
+        if(whichItem === 'numpad'){
+          tempConfig.numpadXpos = ui.position.top;
+          tempConfig.numpadYpos = ui.position.left;
+        }
+        
+        if(whichItem === 'function'){
+          tempConfig.funcXpos = ui.position.top;
+          tempConfig.funcYpos = ui.position.left;
+        }
+
+        if(whichItem === 'alpha'){
+          tempConfig.alphaXpos = ui.position.top;
+          tempConfig.alphaYpos = ui.position.left;
+
+        }
+
+        if(whichItem === 'scroll'){
+          tempConfig.systemXpos = ui.position.top;
+          tempConfig.systemYpos = ui.position.left;
+        }
+
+        if(whichItem === 'navigation'){
+          tempConfig.navXpos = ui.position.top;
+          tempConfig.navYpos = ui.position.left;
+        }
+
+        if(whichItem === 'arrow'){
+          tempConfig.arrowXpos = ui.position.top;
+          tempConfig.arrowYpos = ui.position.left;
+        }
+      
     }
   }).resizable({
     aspectRatio: true,
@@ -400,7 +446,7 @@
 
       // get ratio after all zoom checks are done.
       var zoomChangeRatio = newZoom / initZoom;
-
+      console.log(newZoom);
       // get ui.originalPosition
       // get ui.position
       // apply ratio to ui.position -> new position = old(left,top) / ratio
@@ -435,6 +481,51 @@
       // apply ratio to zoom
       $element.css('zoom', newZoom);
 
+      //Save new zoom per ui item
+        whichItem = ui.helper.context.id;
+        if(whichItem === 'mouse'){
+          tempConfig.mouseZoom = newZoom;
+          tempConfig.mouseXpos = ui.position.top;
+          tempConfig.mouseYpos = ui.position.left;
+        }
+
+        if(whichItem === 'numpad'){
+          tempConfig.numpadZoom = newZoom;
+          tempConfig.numpadXpos = ui.position.top;
+          tempConfig.numpadYpos = ui.position.left;
+        }
+        
+        if(whichItem === 'function'){
+          tempConfig.funcZoom = newZoom;
+          tempConfig.funcXpos = ui.position.top;
+          tempConfig.funcYpos = ui.position.left;
+        }
+
+        if(whichItem === 'alpha'){
+          tempConfig.alphaZoom = newZoom;
+          tempConfig.alphaXpos = ui.position.top;
+          tempConfig.alphaYpos = ui.position.left;
+
+        }
+
+        if(whichItem === 'scroll'){
+          tempConfig.systemZoom = newZoom;
+          tempConfig.systemXpos = ui.position.top;
+          tempConfig.systemYpos = ui.position.left;
+        }
+
+        if(whichItem === 'navigation'){
+          tempConfig.navZoom = newZoom;
+          tempConfig.navXpos = ui.position.top;
+          tempConfig.navYpos = ui.position.left;
+        }
+
+        if(whichItem === 'arrow'){
+          tempConfig.arrowZoom = newZoom;
+          tempConfig.arrowXpos = ui.position.top;
+          tempConfig.arrowYpos = ui.position.left;
+        }
+
       // zoom out resizer handles so they will be the same size for all zooms
       $element.children('.ui-resizable-handle').css('zoom', 1 / newZoom);
     }
@@ -442,7 +533,6 @@
 
   // XBC interaction begins here
   xjs.ready().then(Item.getCurrentSource).then(function(item) {
-    thisItem = item;
     return item.setKeepAspectRatio(false);
   }).then(function(item) {
     // use whole stage for source
@@ -478,14 +568,94 @@
           }
         }
       }
-    };    
+
+      //SET Positions
+      sections.mouse.css('zoom',config.mouseZoom)
+      sections.mouse.css('top',config.mouseXpos)
+      sections.mouse.css('left',config.mouseYpos)
+
+      sections.numpad.css('zoom',config.numpadZoom)
+      sections.numpad.css('top',config.numpadXpos)
+      sections.numpad.css('left',config.numpadYpos)
+
+      sections.func.css('zoom',config.funcZoom)
+      sections.func.css('top',config.funcXpos)
+      sections.func.css('left',config.funcYpos)
+
+      sections.alpha.css('zoom',config.alphaZoom)
+      sections.alpha.css('top',config.alphaXpos)
+      sections.alpha.css('left',config.alphaYpos)
+
+      sections.system.css('zoom',config.systemZoom)
+      sections.system.css('top',config.systemXpos)
+      sections.system.css('left',config.systemYpos)
+
+      sections.nav.css('zoom',config.navZoom)
+      sections.nav.css('top',config.navXpos)
+      sections.nav.css('left',config.navYpos)
+
+      sections.arrow.css('zoom',config.arrowZoom)
+      sections.arrow.css('top',config.arrowXpos)
+      sections.arrow.css('left',config.arrowYpos)
+
+      //Transfer position data back to obj for it to be saved
+      tempConfig.mouseXpos = config.mouseXpos;
+      tempConfig.mouseYpos = config.mouseYpos;
+      if(config.mouseZoom !== undefined){
+        tempConfig.mouseZoom = config.mouseZoom;
+      }
+      
+      tempConfig.numpadXpos = config.numpadXpos;
+      tempConfig.numpadYpos = config.numpadYpos;
+      if(config.numpadZoom !== undefined){
+        tempConfig.numpadZoom = config.numpadZoom;
+      }
+
+      tempConfig.funcXpos = config.funcXpos;
+      tempConfig.funcYpos = config.funcYpos;
+      if(config.funcZoom !== undefined){
+        tempConfig.funcZoom = config.funcZoom;
+      }
+      
+      tempConfig.alphaXpos = config.alphaXpos;
+      tempConfig.alphaYpos = config.alphaYpos;
+      if(config.alphaZoom !== undefined){
+        tempConfig.alphaZoom = config.alphaZoom;
+      }
+      
+      tempConfig.systemXpos = config.systemXpos;
+      tempConfig.systemYpos = config.systemYpos;
+      if(config.systemZoom !== undefined){
+        tempConfig.systemZoom = config.systemZoom;
+      }
+      
+      tempConfig.navXpos = config.navXpos;
+      tempConfig.navYpos = config.navYpos;
+      if(config.navZoom !== undefined){
+        tempConfig.navZoom = config.navZoom;
+      }
+      
+      tempConfig.arrowXpos = config.arrowXpos;
+      tempConfig.arrowYpos = config.arrowYpos;
+      if(config.arrowZoom !== undefined){
+        tempConfig.arrowZoom = config.arrowZoom; 
+      }
+
+    };
+
     //Apply config on Load
-    thisItem.loadConfig().then(receiveData);
+    item.loadConfig().then(receiveData);
+
+    //Update and Save config with new coordinates or sizes every mouse-up
+    allKey.addEventListener('mouseup',function (){
+        item.saveConfig
+        item.loadConfig().then(updateData);
+      });
+
     //Apply config on Save
     xjs.SourcePluginWindow.getInstance().on('save-config', function(config) {
-      item.saveConfig(config);
       // apply configuration
-        for (var i in config) {
+      for (var i in config) {
         if (sections[i] !== undefined) {
           if (config[i] === false) {
             sections[i].addClass('hidden');
@@ -494,6 +664,13 @@
             }
           }
         }
+        updateData(config);
     });
+
+    //Merge config to tempConfig that holds the positions then save
+    var updateData = function(config){
+      for (var i in tempConfig){config[i] = tempConfig[i]}
+      item.saveConfig(config);
+    }
   });
 })();

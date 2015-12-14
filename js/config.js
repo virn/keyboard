@@ -18,7 +18,7 @@
     arrow    : document.getElementById('arrow'),
     numpad   : document.getElementById('numpad'),
     mouse    : document.getElementById('mouse'),
-    keyboard : document.getElementById('keyboard')
+    keyboard : document.getElementById('keyboard'),
   };
 
   var updateElements = function(config) {
@@ -85,6 +85,8 @@
       elements.keyboard.checked = true;
       temp = false;
     }
+
+
 
   };
 
