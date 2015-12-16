@@ -405,68 +405,114 @@
       var  mouseY = event.pageY;      
 
       // Disallow interactions beyond screen bounds
-      if (mouseX < 0) {
+      if ((mouseX < 0) || (mouseY < 0)) {
         mouseX = 0;
         mouseY = 0;
       }
       if (mouseX > $(window).width()) {
         mouseX = $(window).width();
        }
-      if (mouseY < 0) {
-        mouseY = 0;
-        mouseX = 0;
-      }
       if (mouseY > $(window).height()) {
-        console.log($(window).height())
         mouseY = $(window).height();
        }
+
+       
       // get correct new zoom based on axis
       var newZoom = 0;
-      if (axis.indexOf('w') === -1) {
+      if (axis.indexOf('e') === 0) {
           newZoom = Math.max(newZoom, (mouseX - initZoom *
             ui.originalPosition.left) / ui.originalSize.width);
-      } else if (axis.indexOf('e') === -1) {
+      }
+      if (axis.indexOf('w') === 0) {
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.width + 
             initPositionX) - mouseX) / ui.originalSize.width);
       }
 
-      if (axis.indexOf('n') === -1) {
+      if ((axis.indexOf('s') === 0) && (axis.indexOf('w') === 1)) {
+          newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.width + 
+            initPositionX) - mouseX) / ui.originalSize.width);
+      } else if (axis.indexOf('s') === 0){
           newZoom = Math.max(newZoom, (mouseY - initZoom *
             ui.originalPosition.top) / ui.originalSize.height);
-      } else if (axis.indexOf('s') === -1) {
+      }
+      if ((axis.indexOf('n') === 0) && (axis.indexOf('w') === 1)){
+          newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.width + 
+            initPositionX) - mouseX) / ui.originalSize.width);
+      } else if (axis.indexOf('n') === 0) {
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.height + 
             initPositionY) - mouseY) / ui.originalSize.height);
       }
+
       // enforce zoom boundaries
       // Check: minimum zoom level
-      if (newZoom < 1 ) {
+      if (newZoom <= 1 ) {
         newZoom = 1;
       }
       // Check: resizing must not exceed boundaries
 
       // get ratio after all zoom checks are done.
       var zoomChangeRatio = newZoom / initZoom;
-      console.log(newZoom);
+
       // get ui.originalPosition
       // get ui.position
       // apply ratio to ui.position -> new position = old(left,top) / ratio
-      if (axis.indexOf('w') === -1) {
+
+      //All Northward positions
+      if ((axis.indexOf('n') === 0) && (axis.indexOf('e') === 1)){
+        if(newZoom > 1){
+          ui.position.left = ui.originalPosition.left/zoomChangeRatio;
+          ui.position.top = mouseY / newZoom;
+        } else if (newZoom === 1){
+          ui.position.top = ui.originalPosition.top/zoomChangeRatio;          
+        }
+      }
+
+      else if ((axis.indexOf('n') === 0) && (axis.indexOf('w') === 1)){
+        ui.position.left = mouseX / newZoom;
+        ui.position.top = mouseY / newZoom;
+      }
+
+      else if (axis.indexOf('n') === 0) {
+        if(newZoom > 1){
+          ui.position.left = ui.originalPosition.left/zoomChangeRatio;
+          ui.position.top = mouseY / newZoom;
+        } else if (newZoom === 1){
+          ui.position.top = ui.originalPosition.top/zoomChangeRatio;          
+        }
+      }
+
+      //All Southward positions
+      if ((axis.indexOf('s') === 0) && (axis.indexOf('e') === 1)){
+        ui.position.top = ui.originalPosition.top / zoomChangeRatio;
         ui.position.left = ui.originalPosition.left / zoomChangeRatio;
-      } else if (axis.indexOf('e') === -1) {
+
+      } else if ((axis.indexOf('s') === 0) && (axis.indexOf('w') === 1)){
+        //-----------------------
         ui.position.left = mouseX / newZoom;
         if (ui.position.left > initPositionX && newZoom === 1) {
           ui.position.left = initPositionX;
         }
+        ui.position.top = ui.originalPosition.top / zoomChangeRatio;
+
+      } else if (axis.indexOf('s') === 0) {
+        ui.position.top = ui.originalPosition.top / zoomChangeRatio;
+        ui.position.left = ui.originalPosition.left / zoomChangeRatio;
       }
 
-      if (axis.indexOf('n') === -1) {
+      //East and West positions
+      if (axis.indexOf('e') === 0){
+        ui.position.left = ui.originalPosition.left / zoomChangeRatio;
         ui.position.top = ui.originalPosition.top / zoomChangeRatio;
-      } else if (axis.indexOf('s') === -1) {
-        ui.position.top = mouseY / newZoom;
-        if (ui.position.top > initPositionY && newZoom === 1) {
-          ui.position.top = initPositionY;
-        }
       }
+
+      if (axis.indexOf('w') === 0){
+        ui.position.left = mouseX / newZoom;
+        if (ui.position.left > initPositionX && newZoom === 1) {
+          ui.position.left = initPositionX;
+        }
+        ui.position.top = ui.originalPosition.top / zoomChangeRatio;
+      }
+
 
       // maintain size: ui.size = ui.originalSize
       ui.size.width = ui.originalSize.width;
@@ -647,9 +693,10 @@
     item.loadConfig().then(receiveData);
 
     //Update and Save config with new coordinates or sizes every mouse-up
-    allKey.addEventListener('mouseup',function (){
-        item.saveConfig
-        item.loadConfig().then(updateData);
+    allKey.addEventListener('mouseup',function (e){
+        if(e.target.id !== 'allItems'){
+          item.loadConfig().then(updateData);
+        }
       });
 
     //Apply config on Save
