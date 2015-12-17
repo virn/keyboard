@@ -402,7 +402,8 @@
 
       // Get mouse position 
       var  mouseX = event.pageX;
-      var  mouseY = event.pageY;      
+      var  mouseY = event.pageY;
+      var zoomChangeRatio;
 
       // Disallow interactions beyond screen bounds
       if ((mouseX < 0) || (mouseY < 0)) {
@@ -416,7 +417,6 @@
         mouseY = $(window).height();
        }
 
-       
       // get correct new zoom based on axis
       var newZoom = 0;
       if (axis.indexOf('e') === 0) {
@@ -451,7 +451,7 @@
       // Check: resizing must not exceed boundaries
 
       // get ratio after all zoom checks are done.
-      var zoomChangeRatio = newZoom / initZoom;
+      zoomChangeRatio = newZoom / initZoom;
 
       // get ui.originalPosition
       // get ui.position

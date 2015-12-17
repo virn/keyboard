@@ -7,7 +7,9 @@ body {
 label {
   font-size: 12px;
   color: #CCC;
-
+}
+.parentHolder{
+  width: 100%;
 }
 
 .desc {
@@ -15,55 +17,20 @@ label {
   color: #888;
 }
 
-.info, .generalInfo {
-  background-color: #3d3d3d;
-  font-size: 13px;
-  font-weight: 900;
-  color: #000;
-  margin-left: 5px;
-  padding: 0px 4.5px;
-  border-radius: 2px;
+.keysHolder {
+  width: 50%;
+  float: left;
 }
 
-span:hover {
-  background-color: #0098d4;
+.mouseHolder {
+  width: 45%;
+  float: left;
 }
-
-span.info:hover ~ #keyInfo{
-  display: block;
+.boxInner
+{
+  border: 1px solid #000;
+  background-color: #212121;
+  color: #CCC;
+  padding: 5px;
+  font-size: 14px;
 }
-
-span.generalInfo:hover ~ #generalInfo{
-  display: block;
-}
-
-#keyInfo{
-  width: 180px;
-  height: 55px;
-  position: absolute;
-  display: none;
-  left: 110px;
-  top: 75px;
-  padding: 3px;
-  font-size: 11px;
-  line-height: 1.5;
-  color: #888;
-  background-color: #080808;
-  border: 1px solid #888;
-  opacity: .95;
-}
-
-#generalInfo{
-  width: 180px;
-  height: 85px;
-  position: absolute;
-  display: none;
-  left: 130px;
-  top: 35px;
-  padding: 3px;
-  font-size: 11px;
-  color: #888;
-  background-color: #080808;
-  border: 1px solid #888;
-}
-
