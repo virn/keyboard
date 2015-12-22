@@ -399,11 +399,14 @@
     resize: function(event, ui) {
       // ui.element is data section
       var $element = ui.element;
+      var newZoom = 0;
+
+      var newHeight;
+      var newWidth;
 
       // Get mouse position 
       var  mouseX = event.pageX;
       var  mouseY = event.pageY;
-      var zoomChangeRatio;
 
       // Disallow interactions beyond screen bounds
       if ((mouseX < 0) || (mouseY < 0)) {
@@ -417,20 +420,21 @@
         mouseY = $(window).height();
        }
 
-      // get correct new zoom based on axis
-      var newZoom = 0;
+      //Get one unified newZoom
       if (axis.indexOf('e') === 0) {
-          newZoom = Math.max(newZoom, (mouseX - initZoom *
-            ui.originalPosition.left) / ui.originalSize.width);
+        newZoom = Math.max(newZoom, (mouseX - initZoom *
+          ui.originalPosition.left) / ui.originalSize.width);
+
       }
       if (axis.indexOf('w') === 0) {
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.width + 
-            initPositionX) - mouseX) / ui.originalSize.width);
+          initPositionX) - mouseX) / ui.originalSize.width);
       }
 
       if ((axis.indexOf('s') === 0) && (axis.indexOf('w') === 1)) {
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.width + 
             initPositionX) - mouseX) / ui.originalSize.width);
+ 
       } else if (axis.indexOf('s') === 0){
           newZoom = Math.max(newZoom, (mouseY - initZoom *
             ui.originalPosition.top) / ui.originalSize.height);
@@ -438,20 +442,29 @@
       if ((axis.indexOf('n') === 0) && (axis.indexOf('w') === 1)){
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.width + 
             initPositionX) - mouseX) / ui.originalSize.width);
+          
       } else if (axis.indexOf('n') === 0) {
           newZoom = Math.max(newZoom, (initZoom * (ui.originalSize.height + 
-            initPositionY) - mouseY) / ui.originalSize.height);
+            initPositionY) - mouseY) / ui.originalSize.height); 
       }
 
-      // enforce zoom boundaries
+
+      var newHeight = (ui.originalSize.height + ui.position.top) * newZoom;
+      var newWidth = (ui.originalSize.width + ui.position.left) * newZoom;
+
+      if ((newHeight >= $(window).height()) && ((axis.indexOf('e') === 0)||(axis.indexOf('w') === 0)||(axis.indexOf('sw') === 0))) {
+        newZoom = initZoom;
+        }
+      else if ((newWidth >= $(window).width()) && ((axis.indexOf('s') === 0)||(axis.indexOf('se') === 0)||(axis.indexOf('ne') === 0)||(axis.indexOf('n') === 0))){
+        newZoom = initZoom;
+        }
       // Check: minimum zoom level
       if (newZoom <= 1 ) {
         newZoom = 1;
       }
       // Check: resizing must not exceed boundaries
-
       // get ratio after all zoom checks are done.
-      zoomChangeRatio = newZoom / initZoom;
+      var zoomChangeRatio = newZoom / initZoom;
 
       // get ui.originalPosition
       // get ui.position
